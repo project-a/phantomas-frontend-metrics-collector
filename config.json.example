@@ -1,0 +1,16 @@
+{
+    "output-base-dir": "/Users/mloetzsch/Projects/web-performance-stats/",
+    "phantomas-binary": "/opt/local/bin/phantomas",
+    "sites": {
+        "zalando.de": {
+            "start page": "https://www.zalando.de",
+            "catalog page": "https://www.zalando.de/damenbekleidung/",
+            "product detail page": "https://www.zalando.de/adidas-originals-sneaker-core-black-ad115b023-q11.html"
+        },
+        "aboutyou.de": {
+            "start page": "http://www.aboutyou.de/",
+            "catalog page": "http://www.aboutyou.de/frauen/bekleidung",
+            "product detail page": "http://www.aboutyou.de/p/marc-opolo/ledersandale-1861142"
+        }
+    }
+}
