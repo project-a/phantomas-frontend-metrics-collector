@@ -1,4 +1,4 @@
-# Phantomas Metrics Collector
+# Phantomas Frontend Metrics Collector
 
 Collects frontend performance metrics for a list of configured sites and writes them to json files.
 
