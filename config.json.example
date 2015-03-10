@@ -1,6 +1,7 @@
 {
     "output-base-dir": "/Users/mloetzsch/Projects/web-performance-stats/",
     "phantomas-binary": "/opt/local/bin/phantomas",
+    "max-retries": 5,
     "sites": {
         "zalando.de": {
             "start page": "https://www.zalando.de",

@@ -35,23 +35,30 @@ now = datetime.datetime.now()
 # crawl pages and write results
 for site, pages in config['sites'].items():
     for page, url in pages.items():
-        print 'fetching ' + site + ' ' + page + ' (' + url + ')'
+        retries = 0
+        success = False
+        while not success and retries < config['max-retries']:
+            retries += 1
 
-        process = subprocess.Popen(config['phantomas-binary'] + ' --reporter=json ' + url,
-                                   shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            print 'fetching %s %s (%s) [%s]' % (site, page, url, retries)
+            process = subprocess.Popen(config['phantomas-binary'] + ' --reporter=json ' + url,
+                                       shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-        # output hopefully is one line of json
-        output = process.stdout.readline()
+            # output hopefully is one line of json
+            output = process.stdout.readline()
 
-        if (process.wait() not in [0, 252]):  # 252 is timeout
-            for line in process.stderr.readlines():
-                print >> sys.stderr, line
-            exit(1)
+            if (process.wait() not in [0, 252]):  # 252 is timeout
+                if retries == config['max-retries']:
+                    for line in process.stderr.readlines():
+                        print >> sys.stderr, line
+                    exit(1)
+                else:
+                    print 'Retry'
 
-        phantomas_result = json.loads(output, object_pairs_hook=OrderedDict)
-        data = {'site': site, 'page': page, 'url': url, 'timestamp': now.isoformat(),
-                'metrics': phantomas_result['metrics']}
+            else:
+                success = True
+                phantomas_result = json.loads(output, object_pairs_hook=OrderedDict)
+                data = {'site': site, 'page': page, 'url': url, 'timestamp': now.isoformat(),
+                        'metrics': phantomas_result['metrics']}
 
-        json.dump(data, open(output_dir + site + '-' + page + '.json', 'w'), indent=4)
-
-
+                json.dump(data, open(output_dir + site + '-' + page + '.json', 'w'), indent=4)
